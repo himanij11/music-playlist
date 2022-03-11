@@ -1,50 +1,22 @@
-<<<<<<< HEAD
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7054010&assignment_repo_type=AssignmentRepo)
-# tprj
-Term Project repo
-=======
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6690081&assignment_repo_type=AssignmentRepo)
-# SFU CMPT 756 main project directory
-
-This is the course repo for CMPT 756 (Spring 2022)
-
-You will find resources for your assignments and term project here.
+# SFU CMPT 756 Term Project
 
 
-### 1. Instantiate the template files
+### 1. Developing for the cloud environment
 
-#### Fill in the required values in the template variable file
+### 2. Developing 3 microservices using a highly decoupled design:
+#### a. Music 
+#### b. Users 
+#### c. Playlist
 
-Copy the file `cluster/tpl-vars-blank.txt` to `cluster/tpl-vars.txt`
-and fill in all the required values in `tpl-vars.txt`.  These include
-things like your AWS keys, your GitHub signon, and other identifying
-information.  See the comments in that file for details. Note that you
-will need to have installed Gatling
-(https://gatling.io/open-source/start-testing/) first, because you
-will be entering its path in `tpl-vars.txt`.
+### 3. Observing a system at load using a variety of tools
 
-#### Instantiate the templates
+### 4. Exploring the failure modes of a system
 
-Once you have filled in all the details, run
+### 5. Exploring various approaches to remediate such failures
 
-~~~
-$ make -f k8s-tpl.mak templates
-~~~
 
-This will check that all the programs you will need have been
-installed and are in the search path.  If any program is missing,
-install it before proceeding.
-
-The script will then generate makefiles personalized to the data that
-you entered in `clusters/tpl-vars.txt`.
-
-**Note:** This is the *only* time you will call `k8s-tpl.mak`
-directly. This creates all the non-templated files, such as
-`k8s.mak`.  You will use the non-templated makefiles in all the
-remaining steps.
-
-### 2. Ensure AWS DynamoDB is accessible/running
-
+#### Please ensure AWS DynamoDB is accessible/running
 Regardless of where your cluster will run, it uses AWS DynamoDB
 for its backend database. Check that you have the necessary tables
 installed by running
@@ -58,4 +30,3 @@ The resulting output should include tables `User` and `Music`.
 ----
 
 
->>>>>>> 11acc2ad794425acb66a89b80bed65574b0a5d6e
