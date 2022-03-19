@@ -131,7 +131,6 @@ if __name__ == '__main__':
         logging.error("missing port arg 1")
         sys.exit(-1)
 
-    app.logger.error("Unique code: {}".format(ucode))
     p = int(sys.argv[1])
     # Do not set debug=True---that will disable the Prometheus metrics
     app.run(host='0.0.0.0', port=p, threaded=True)
