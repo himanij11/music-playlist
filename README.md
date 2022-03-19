@@ -9,7 +9,10 @@
 #### b. Users 
 #### c. Playlist
 
-### 3. Observing a system at load using a variety of tools
+### 3. Observing a system at load using a variety of tool
+Gatling was used for testing the system at load.
+At the moment we are having a bit of trouble getting gatling to work as its not picking up the scala files
+We are working on fixing this issue
 
 ### 4. Exploring the failure modes of a system
 
