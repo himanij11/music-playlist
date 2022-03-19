@@ -14,27 +14,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cmpt756s3-test
+  name: cmpt756s3-v1
   labels:
     app: cmpt756s3
-    version: test
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cmpt756s3
-      version: test
+      version: v1
   template:
     metadata:
       name: service3-pod
       labels:
         app: cmpt756s3
-        version: test
+        version: v1
     spec:
       serviceAccountName: svc-s3
       containers:
       - name: cmpt756s3
-        image: 'ghcr.io/bikramjeetsingh/cmpt756s3:test'
+        image: 'ghcr.io/bikramjeetsingh/cmpt756s3:v1'
         imagePullPolicy: Always
         ports:
         - containerPort: 30002

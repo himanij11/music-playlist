@@ -37,17 +37,10 @@ db = {
         "read",
         "write",
         "delete",
-        "update"
+        "update",
+        "fetchall",
     ]
 }
-
-
-@bp.route('/', methods=['GET'])
-@metrics.do_not_track()
-def hello_world():
-    return ("If you are reading this in a browser, your service is "
-            "operational. Switch to curl/Postman/etc to interact using the "
-            "other HTTP verbs.")
 
 
 @bp.route('/health')
@@ -56,10 +49,24 @@ def health():
     return Response("", status=200, mimetype="application/json")
 
 
-@bp.route('/readiness')
-@metrics.do_not_track()
-def readiness():
-    return Response("", status=200, mimetype="application/json")
+@bp.route('/', methods=['GET'])
+def get_users():
+    headers = request.headers
+    # check header here
+    if 'Authorization' not in headers:
+        return Response(json.dumps({"error": "missing auth"}),
+                        status=401,
+                        mimetype='application/json')
+    # list all songs here
+    args = request.args.to_dict()
+    payload = {"objtype": "user"}
+    url = db['name'] + '/' + db['endpoint'][4]
+    response = requests.get(
+        url,
+        params=payload,
+        headers={'Authorization': headers['Authorization']}
+    )
+    return (response.json())
 
 
 @bp.route('/<user_id>', methods=['PUT'])

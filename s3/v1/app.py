@@ -1,11 +1,11 @@
 """
 SFU CMPT 756
-Sample application---music service.
+Sample application---playlist service.
 """
 
 # Standard library modules
 import logging
-import os
+import random
 import sys
 
 # Installed packages
@@ -25,7 +25,7 @@ import simplejson as json
 app = Flask(__name__)
 
 metrics = PrometheusMetrics(app)
-metrics.info('app_info', 'Music process')
+metrics.info('app_info', 'playlist process')
 
 db = {
     "name": "http://cmpt756db:30002/api/v1/datastore",
@@ -46,7 +46,7 @@ def health():
 
 
 @bp.route('/', methods=['GET'])
-def get_songs_by_user():
+def get_playlists_by_user():
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
@@ -55,35 +55,37 @@ def get_songs_by_user():
                         mimetype='application/json')
     # list all songs here
     args = request.args.to_dict()
-    payload = {"objtype": "music", "objkey": args['user_id'], "tableid": "User"}
+    payload = {"objtype": "playlist", "objkey": args['user_id'], "tableid": "User"}
     url = db['name'] + '/' + db['endpoint'][3]
     response = requests.get(
         url,
         params=payload,
-        headers={'Authorization': headers['Authorization']}
+        # headers={'Authorization': headers['Authorization']}
     )
     return (response.json())
 
 
-@bp.route('/<music_id>', methods=['GET'])
-def get_song(music_id):
+@bp.route('/<playlist_id>', methods=['GET'])
+def get_playlist(playlist_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
         return Response(json.dumps({"error": "missing auth"}),
                         status=401,
                         mimetype='application/json')
-    payload = {"objtype": "music", "objkey": music_id}
+    payload = {"objtype": "playlist", "objkey": playlist_id}
+
     url = db['name'] + '/' + db['endpoint'][0]
     response = requests.get(
         url,
         params=payload,
-        headers={'Authorization': headers['Authorization']})
+        # headers={'Authorization': headers['Authorization']}
+    )
     return (response.json())
 
 
 @bp.route('/', methods=['POST'])
-def create_song():
+def create_playlist():
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
@@ -92,21 +94,22 @@ def create_song():
                         mimetype='application/json')
     try:
         content = request.get_json()
-        Artist = content['Artist']
-        SongTitle = content['SongTitle']
+        Name = content['name']
+        Songs = content['songs']
         User = content['User']
     except Exception:
         return json.dumps({"message": "error reading arguments"})
     url = db['name'] + '/' + db['endpoint'][1]
     response = requests.post(
         url,
-        json={"objtype": "music", "Artist": Artist, "SongTitle": SongTitle, "User": User},
-        headers={'Authorization': headers['Authorization']})
+        json={"objtype": "playlist", "Name": Name, "Songs": Songs, "User": User},
+        headers={'Authorization': headers['Authorization']}
+    )
     return (response.json())
 
 
-@bp.route('/<music_id>', methods=['DELETE'])
-def delete_song(music_id):
+@bp.route('/<playlist_id>', methods=['DELETE'])
+def delete_playlist(playlist_id):
     headers = request.headers
     # check header here
     if 'Authorization' not in headers:
@@ -116,7 +119,7 @@ def delete_song(music_id):
     url = db['name'] + '/' + db['endpoint'][2]
     response = requests.delete(
         url,
-        params={"objtype": "music", "objkey": music_id},
+        params={"objtype": "playlist", "objkey": playlist_id},
         headers={'Authorization': headers['Authorization']})
     return (response.json())
 
@@ -124,14 +127,13 @@ def delete_song(music_id):
 # All database calls will have this prefix.  Prometheus metric
 # calls will not---they will have route '/metrics'.  This is
 # the conventional organization.
-app.register_blueprint(bp, url_prefix='/api/v1/music/')
+app.register_blueprint(bp, url_prefix='/api/v1/playlist/')
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         logging.error("missing port arg 1")
         sys.exit(-1)
 
-    app.logger.error("Unique code: {}".format(ucode))
     p = int(sys.argv[1])
     # Do not set debug=True---that will disable the Prometheus metrics
     app.run(host='0.0.0.0', port=p, threaded=True)

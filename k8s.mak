@@ -16,7 +16,7 @@
 
 # These will be filled in by template processor
 CREG=ghcr.io
-REGID=nka77
+REGID=bikramjeetsingh
 AWS_REGION=us-west-2
 
 # Keep all the logs out of main directory
@@ -32,7 +32,7 @@ IC=istioctl
 # Override these by environment variables and `make -e`
 APP_VER_TAG=v1
 S2_VER=v1
-S3_VER=test
+S3_VER=v1
 LOADER_VER=v1
 
 # Kubernetes parameters that most of the time will be unchanged
