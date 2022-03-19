@@ -1,7 +1,10 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6690081&assignment_repo_type=AssignmentRepo)
 # SFU CMPT 756 Term Project - Team Rocket
 
-This repo contains the code to develop multiple microservices in cloud environment, in a highly decoupled design. The repo is also used to observe the system at load using Gatling. We build upon the cloud architecture developed in the CMPT756 assignments and add a new microservice called ‘playlist’. So the application incorporates 5 microservices in total, out of which 3 are music, user and playlist services. The remaining 2 are for initializing anf loading data to DynamoDB.
+This repo contains the code to develop the multiple microservices in a cloud environment, in a highly decoupled design. The repo is also used to observe the system at load using Gatling. We build upon the cloud architecture developed in the CMPT756 assignments and added a new microservice called ‘playlist’. So the application incorporates 5 microservices in total, out of which 3 are music, user and playlist services. The remaining 2 are for initializing and loading the data to DynamoDB.
+
+
+#### Tools and Technologies: Python, Flask, AWS, Docker, Kubernetes, DynamoDB, Gatling, Jira, Git
 
 
 The main components of this project are:
