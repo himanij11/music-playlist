@@ -89,7 +89,7 @@ def scan():
         table_id = objtype + "_id"
     table = dynamodb.Table(table_name)
     response = table.scan(Select='ALL_ATTRIBUTES',
-                           FilterExpression=Key(table_id).eq(objkey))
+                          FilterExpression=Key(table_id).eq(objkey))
     return response
 
 

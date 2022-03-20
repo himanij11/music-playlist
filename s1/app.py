@@ -58,7 +58,6 @@ def get_users():
                         status=401,
                         mimetype='application/json')
     # list all songs here
-    args = request.args.to_dict()
     payload = {"objtype": "user"}
     url = db['name'] + '/' + db['endpoint'][4]
     response = requests.get(

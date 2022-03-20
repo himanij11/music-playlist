@@ -5,7 +5,6 @@ Sample application---music service.
 
 # Standard library modules
 import logging
-import os
 import sys
 
 # Installed packages
@@ -55,7 +54,9 @@ def get_songs_by_user():
                         mimetype='application/json')
     # list all songs here
     args = request.args.to_dict()
-    payload = {"objtype": "music", "objkey": args['user_id'], "tableid": "User"}
+    payload = {"objtype": "music",
+               "objkey": args['user_id'],
+               "tableid": "User"}
     url = db['name'] + '/' + db['endpoint'][3]
     response = requests.get(
         url,
@@ -100,7 +101,10 @@ def create_song():
     url = db['name'] + '/' + db['endpoint'][1]
     response = requests.post(
         url,
-        json={"objtype": "music", "Artist": Artist, "SongTitle": SongTitle, "User": User},
+        json={"objtype": "music",
+              "Artist": Artist,
+              "SongTitle": SongTitle,
+              "User": User},
         headers={'Authorization': headers['Authorization']})
     return (response.json())
 
