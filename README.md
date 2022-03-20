@@ -28,7 +28,7 @@ installed by running
 $ aws dynamodb list-tables
 ~~~
 
-The resulting output should include tables `User`, `Music` anf 'Playlist'.
+The resulting output should include tables `User`, `Music` and `Playlist`.
 
 ----
 
