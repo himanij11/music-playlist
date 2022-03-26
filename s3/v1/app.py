@@ -45,6 +45,12 @@ def health():
     return Response("", status=200, mimetype="application/json")
 
 
+@bp.route('/readiness')
+@metrics.do_not_track()
+def readiness():
+    return Response("", status=200, mimetype="application/json")
+
+
 @bp.route('/', methods=['GET'])
 def get_playlists_by_user():
     headers = request.headers
