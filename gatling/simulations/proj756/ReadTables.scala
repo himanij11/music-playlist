@@ -186,7 +186,7 @@ class ReadAllVaryingSim extends ReadTablesSim {
     .exec(RUserVarying.ruser)
   
   val scnReadPV = scenario("ReadPlaylistVarying")
-    .exec(RUserVarying.ruser)
+    .exec(RPlaylistVarying.rplaylist)
 
   val users = Utility.envVarToInt("USERS", 10)
 
