@@ -16,6 +16,7 @@ import sys
 # Local modules
 import create_tables
 import music
+import playlist
 
 # The services check only that we pass an authorization,
 # not whether it's valid
@@ -54,6 +55,15 @@ def parse_args():
         help="Port number of music service."
         )
     argp.add_argument(
+        'playlist_address',
+        help="DNS name or IP address of playlist service."
+        )
+    argp.add_argument(
+        'playlist_port',
+        type=int,
+        help="Port number of playlist service."
+        )
+    argp.add_argument(
         'table_suffix',
         help="Suffix to add to table names (not including leading "
              "'-').  If suffix is 'scp756-2022', the music table "
@@ -64,6 +74,8 @@ def parse_args():
         args.user_address, args.user_port)
     args.music_url = "http://{}:{}/api/v1/music/".format(
         args.music_address, args.music_port)
+    args.playlist_url = "http://{}:{}/api/v1/playlist/".format(
+        args.playlist_address, args.playlist_port)
     return args
 
 
@@ -118,11 +130,50 @@ def setup(args):
         args.access_key_id,
         args.secret_access_key,
         'Music-' + args.table_suffix,
-        'User-' + args.table_suffix
+        'User-' + args.table_suffix,
+        'Playlist-' + args.table_suffix,
     )
 
 
-def run_test(args):
+def run_playlist_test(args):
+    """Run the tests.
+
+    Parameters
+    ----------
+    args: namespace
+        The arguments for the test. Uses music_url.
+
+    Prerequisites
+    -------------
+    The DyamoDB tables must already exist.
+
+    Returns
+    -------
+    number
+        An HTTP status code representing the test result.
+        Some "pseudo-HTTP" codes are defined in the 600 range
+        to indicate conditions that are not included in the HTTP
+        specification.
+
+    Notes
+    -----
+    This test is highly incomplete and needs substantial extension.
+    """
+    pserv = playlist.Playlist(args.playlist_url, DUMMY_AUTH)
+    pname, song, userId = ('Playlist1', ['DUMMY-SONG-UUID'], 'DUMMY-USER-UUID')
+    trc, m_id = pserv.create(pname, song, userId)
+    if trc != 200:
+        sys.exit(1)
+    trc, rn, rs, ru = pserv.read(m_id)
+    if trc == 200:
+        if pname != rn or song != rs or userId != ru:
+            # Fake HTTP code to indicate error
+            trc = 601
+        pserv.delete(m_id)
+    return trc
+
+
+def run_music_test(args):
     """Run the tests.
 
     Parameters
@@ -147,8 +198,12 @@ def run_test(args):
     This test is highly incomplete and needs substantial extension.
     """
     mserv = music.Music(args.music_url, DUMMY_AUTH)
-    artist, song = ('Mary Chapin Carpenter', 'John Doe No. 24')
-    trc, m_id = mserv.create(artist, song)
+    artist, song, userId = (
+        'Mary Chapin Carpenter',
+        'John Doe No. 24',
+        'DUMMY_UUID',
+    )
+    trc, m_id = mserv.create(artist, song, userId)
     if trc != 200:
         sys.exit(1)
     trc, ra, rs = mserv.read(m_id)
@@ -164,6 +219,11 @@ if __name__ == '__main__':
     args = parse_args()
     get_env_vars(args)
     setup(args)
-    # trc = run_test(args)
-    # if trc != 200:
-    # sys.exit(1)
+    trc = run_music_test(args)
+    if trc != 200:
+        print(f"Music test failed with status code {trc}")
+        sys.exit(1)
+    trc = run_playlist_test(args)
+    if trc != 200:
+        print(f"Playlist test failed with status code {trc}")
+        sys.exit(1)

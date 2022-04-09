@@ -8,7 +8,7 @@ Python  API for the music service.
 import requests
 
 
-class Music():
+class Playlist():
     """Python API for the music service.
 
     Handles the details of formatting HTTP requests and decoding
@@ -28,7 +28,7 @@ class Music():
         self._url = url
         self._auth = auth
 
-    def create(self, artist, song, userId):
+    def create(self, playlistName, songs, user):
         """Create an artist, song pair.
 
         Parameters
@@ -46,12 +46,12 @@ class Music():
         """
         r = requests.post(
             self._url,
-            json={'Artist': artist,
-                  'SongTitle': song,
-                  'User': userId},
+            json={'name': playlistName,
+                  'songs': songs,
+                  'User': user},
             headers={'Authorization': self._auth}
         )
-        return r.status_code, r.json()['music_id']
+        return r.status_code, r.json()['playlist_id']
 
     def read(self, m_id):
         """Read an artist, song pair.
@@ -78,9 +78,8 @@ class Music():
             )
         if r.status_code != 200:
             return r.status_code, None, None
-
         item = r.json()['Items'][0]
-        return r.status_code, item['Artist'], item['SongTitle']
+        return r.status_code, item['Name'], item['Songs'], item['User']
 
     def delete(self, m_id):
         """Delete an artist, song pair.
