@@ -103,7 +103,7 @@ object RMusicVarying {
 object RPlaylistVarying {
   val feeder = csv("playlists.csv").eager.circular
 
-  val rmusic = forever("i") {
+  val rplaylist = forever("i") {
     feed(feeder)
     .exec(http("RPlaylistsVarying ${i}")
       .get("/api/v1/playlist/${UUID}"))
