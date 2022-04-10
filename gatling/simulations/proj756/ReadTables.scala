@@ -174,7 +174,30 @@ class ReadPlaylistSim extends ReadTablesSim {
 }
 
 /*
-  Read both services concurrently at varying rates.
+  Read all services with set number of users.
+*/
+class ReadAllFixedSim extends ReadTablesSim {
+  val scnReadMV = scenario("ReadMusic")
+    .exec(RMusic.rmusic)
+
+  val scnReadUV = scenario("ReadUser")
+    .exec(RUser.ruser)
+  
+  val scnReadPV = scenario("ReadPlaylist")
+    .exec(RPlaylist.rplaylist)
+
+  val users = Utility.envVarToInt("USERS", 10)
+
+  setUp(
+    // Add one user per 10 s up to specified value
+    scnReadMV.inject(atOnceUsers(Utility.envVarToInt("USERS", 1))),
+    scnReadUV.inject(atOnceUsers(Utility.envVarToInt("USERS", 1))),
+    scnReadPV.inject(atOnceUsers(Utility.envVarToInt("USERS", 1)))
+  ).protocols(httpProtocol)
+}
+
+/*
+  Read all services concurrently at varying rates.
   Ramp up new users one / 10 s until requested USERS
   is reached for each service.
 */
