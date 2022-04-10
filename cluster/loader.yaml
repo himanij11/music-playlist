@@ -3,14 +3,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cmpt756loader
+  name: trocketloader
   labels:
-    app: cmpt756loader
+    app: trocketloader
 spec:
   template:
     metadata:
       labels:
-        app: cmpt756loader
+        app: trocketloader
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
@@ -19,7 +19,7 @@ spec:
       containers:
       - name: loader
         imagePullPolicy: Always
-        image: 'ghcr.io/nka77/cmpt756loader:v1'
+        image: 'ghcr.io/scp756-221/trocketloader:v1'
         env:
         - name: SVC_LOADER_TOKEN
           valueFrom:

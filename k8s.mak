@@ -16,7 +16,9 @@
 
 # These will be filled in by template processor
 CREG=ghcr.io
-REGID=nka77
+REGID=scp756-221
+LOCREGID=nka77
+TEAM=trocket
 AWS_REGION=us-west-2
 
 # Keep all the logs out of main directory
@@ -78,21 +80,21 @@ rollout: rollout-s1 rollout-s2 rollout-s3 rollout-db
 
 # --- rollout-s1: Rollout a new deployment of S1
 rollout-s1: s1
-	$(KC) rollout -n $(APP_NS) restart deployment/cmpt756s1
+	$(KC) rollout -n $(APP_NS) restart deployment/$(TEAM)s1
 
 # --- rollout-s2: Rollout a new deployment of S2
 rollout-s2: $(LOG_DIR)/s2-$(S2_VER).repo.log  cluster/s2-dpl-$(S2_VER).yaml
 	$(KC) -n $(APP_NS) apply -f cluster/s2-dpl-$(S2_VER).yaml | tee $(LOG_DIR)/rollout-s2.log
-	$(KC) rollout -n $(APP_NS) restart deployment/cmpt756s2-$(S2_VER) | tee -a $(LOG_DIR)/rollout-s2.log
+	$(KC) rollout -n $(APP_NS) restart deployment/$(TEAM)s2-$(S2_VER) | tee -a $(LOG_DIR)/rollout-s2.log
 
 # --- rollout-s3: Rollout a new deployment of S3
 rollout-s3: $(LOG_DIR)/s3-$(S3_VER).repo.log  cluster/s3-dpl-$(S3_VER).yaml
 	$(KC) -n $(APP_NS) apply -f cluster/s3-dpl-$(S3_VER).yaml | tee $(LOG_DIR)/rollout-s3.log
-	$(KC) rollout -n $(APP_NS) restart deployment/cmpt756s3-$(S3_VER) | tee -a $(LOG_DIR)/rollout-s3.log
+	$(KC) rollout -n $(APP_NS) restart deployment/$(TEAM)s3-$(S3_VER) | tee -a $(LOG_DIR)/rollout-s3.log
 
 # --- rollout-db: Rollout a new deployment of DB
 rollout-db: db
-	$(KC) rollout -n $(APP_NS) restart deployment/cmpt756db
+	$(KC) rollout -n $(APP_NS) restart deployment/$(TEAM)db
 
 # --- health-off: Turn off the health monitoring for the three microservices
 # If you don't know exactly why you want to do this---don't
@@ -134,34 +136,34 @@ extern: showcontext
 
 # --- log-X: show the log of a particular service
 log-s1:
-	$(KC) -n $(APP_NS) logs deployment/cmpt756s1 --container cmpt756s1
+	$(KC) -n $(APP_NS) logs deployment/$(TEAM)s1 --container $(TEAM)s1
 
 log-s2:
-	$(KC) -n $(APP_NS) logs deployment/cmpt756s2 --container cmpt756s2
+	$(KC) -n $(APP_NS) logs deployment/$(TEAM)s2 --container $(TEAM)s2
 
 log-s3:
-	$(KC) -n $(APP_NS) logs deployment/cmpt756s3 --container cmpt756s3
+	$(KC) -n $(APP_NS) logs deployment/$(TEAM)s3 --container $(TEAM)s3
 
 log-db:
-	$(KC) -n $(APP_NS) logs deployment/cmpt756db --container cmpt756db
+	$(KC) -n $(APP_NS) logs deployment/$(TEAM)db --container $(TEAM)db
 
 
 # --- shell-X: hint for shell into a particular service
 shell-s1:
 	@echo Use the following command line to drop into the s1 service:
-	@echo   $(KC) -n $(APP_NS) exec -it deployment/cmpt756s1 --container cmpt756s1 -- bash
+	@echo   $(KC) -n $(APP_NS) exec -it deployment/$(TEAM)s1 --container $(TEAM)s1 -- bash
 
 shell-s2:
 	@echo Use the following command line to drop into the s2 service:
-	@echo   $(KC) -n $(APP_NS) exec -it deployment/cmpt756s2 --container cmpt756s2 -- bash
+	@echo   $(KC) -n $(APP_NS) exec -it deployment/$(TEAM)s2 --container $(TEAM)s2 -- bash
 
 shell-s3:
 	@echo Use the following command line to drop into the s3 service:
-	@echo   $(KC) -n $(APP_NS) exec -it deployment/cmpt756s3 --container cmpt756s3 -- bash
+	@echo   $(KC) -n $(APP_NS) exec -it deployment/$(TEAM)s3 --container $(TEAM)s3 -- bash
 
 shell-db:
 	@echo Use the following command line to drop into the db service:
-	@echo   $(KC) -n $(APP_NS) exec -it deployment/cmpt756db --container cmpt756db -- bash
+	@echo   $(KC) -n $(APP_NS) exec -it deployment/$(TEAM)db --container $(TEAM)db -- bash
 
 # --- lsa: List services in all namespaces
 lsa: showcontext
@@ -188,7 +190,7 @@ showcontext:
 
 # Run the loader, rebuilding if necessary, starting DynamDB if necessary, building ConfigMaps
 loader: dynamodb-init $(LOG_DIR)/loader.repo.log cluster/loader.yaml
-	$(KC) -n $(APP_NS) delete --ignore-not-found=true jobs/cmpt756loader
+	$(KC) -n $(APP_NS) delete --ignore-not-found=true jobs/$(TEAM)loader
 	tools/build-configmap.sh gatling/resources/users.csv cluster/users-header.yaml | kubectl -n $(APP_NS) apply -f -
 	tools/build-configmap.sh gatling/resources/music.csv cluster/music-header.yaml | kubectl -n $(APP_NS) apply -f -
 	$(KC) -n $(APP_NS) apply -f cluster/loader.yaml | tee $(LOG_DIR)/loader.log
@@ -201,14 +203,14 @@ dynamodb-init: $(LOG_DIR)/dynamodb-init.log
 $(LOG_DIR)/dynamodb-init.log: cluster/cloudformationdynamodb.json
 	@# "|| true" suffix because command fails when stack already exists
 	@# (even with --on-failure DO_NOTHING, a nonzero error code is returned)
-	$(AWS) cloudformation create-stack --stack-name db-$(REGID) --template-body file://$< || true | tee $(LOG_DIR)/dynamodb-init.log
+	$(AWS) cloudformation create-stack --stack-name db-$(TEAM) --template-body file://$< || true | tee $(LOG_DIR)/dynamodb-init.log
 	# Must give DynamoDB time to create the tables before running the loader
 	sleep 20
 
 # --- dynamodb-stop: Stop the AWS DynamoDB service
 #
 dynamodb-clean:
-	$(AWS) cloudformation delete-stack --stack-name db-$(REGID) || true | tee $(LOG_DIR)/dynamodb-clean.log
+	$(AWS) cloudformation delete-stack --stack-name db-$(TEAM) || true | tee $(LOG_DIR)/dynamodb-clean.log
 	@# Rename DynamoDB log so dynamodb-init will force a restart but retain the log
 	/bin/mv -f $(LOG_DIR)/dynamodb-init.log $(LOG_DIR)/dynamodb-init-old.log || true
 
@@ -219,7 +221,7 @@ ls-tables:
 # --- registry-login: Login to the container registry
 #
 registry-login:
-	@/bin/sh -c 'cat cluster/${CREG}-token.txt | $(DK) login $(CREG) -u $(REGID) --password-stdin'
+	@/bin/sh -c 'cat cluster/${CREG}-token.txt | $(DK) login $(CREG) -u $(LOCREGID) --password-stdin'
 
 # --- Variables defined for URL targets
 # Utility to get the hostname (AWS) or ip (everyone else) of a load-balanced service
@@ -321,40 +323,40 @@ cri: $(LOG_DIR)/s1.repo.log $(LOG_DIR)/s2-$(S2_VER).repo.log $(LOG_DIR)/s3-$(S3_
 # Build the s1 service
 $(LOG_DIR)/s1.repo.log: s1/Dockerfile s1/app.py s1/requirements.txt
 	make -f k8s.mak --no-print-directory registry-login
-	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/cmpt756s1:$(APP_VER_TAG) s1 | tee $(LOG_DIR)/s1.img.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756s1:$(APP_VER_TAG) | tee $(LOG_DIR)/s1.repo.log
+	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/$(TEAM)s1:$(APP_VER_TAG) s1 | tee $(LOG_DIR)/s1.img.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s1:$(APP_VER_TAG) | tee $(LOG_DIR)/s1.repo.log
 
 # Build the s2 service
 $(LOG_DIR)/s2-$(S2_VER).repo.log: s2/$(S2_VER)/Dockerfile s2/$(S2_VER)/app.py s2/$(S2_VER)/requirements.txt
 	make -f k8s.mak --no-print-directory registry-login
-	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/cmpt756s2:$(S2_VER) s2/$(S2_VER) | tee $(LOG_DIR)/s2-$(S2_VER).img.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756s2:$(S2_VER) | tee $(LOG_DIR)/s2-$(S2_VER).repo.log
+	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/$(TEAM)s2:$(S2_VER) s2/$(S2_VER) | tee $(LOG_DIR)/s2-$(S2_VER).img.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s2:$(S2_VER) | tee $(LOG_DIR)/s2-$(S2_VER).repo.log
 
 # Build the s3 service
 $(LOG_DIR)/s3-$(S3_VER).repo.log: s3/$(S3_VER)/Dockerfile s3/$(S3_VER)/app.py s3/$(S3_VER)/requirements.txt
 	make -f k8s.mak --no-print-directory registry-login
-	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/cmpt756s3:$(S3_VER) s3/$(S3_VER) | tee $(LOG_DIR)/s3-$(S3_VER).img.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756s3:$(S3_VER) | tee $(LOG_DIR)/s3-$(S3_VER).repo.log
+	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/$(TEAM)s3:$(S3_VER) s3/$(S3_VER) | tee $(LOG_DIR)/s3-$(S3_VER).img.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s3:$(S3_VER) | tee $(LOG_DIR)/s3-$(S3_VER).repo.log
 
 # Build the db service
 $(LOG_DIR)/db.repo.log: db/Dockerfile db/app.py db/requirements.txt
 	make -f k8s.mak --no-print-directory registry-login
-	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/cmpt756db:$(APP_VER_TAG) db | tee $(LOG_DIR)/db.img.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756db:$(APP_VER_TAG) | tee $(LOG_DIR)/db.repo.log
+	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/$(TEAM)db:$(APP_VER_TAG) db | tee $(LOG_DIR)/db.img.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)db:$(APP_VER_TAG) | tee $(LOG_DIR)/db.repo.log
 
 # Build the loader
 $(LOG_DIR)/loader.repo.log: loader/app.py loader/requirements.txt loader/Dockerfile registry-login
-	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/cmpt756loader:$(LOADER_VER) loader  | tee $(LOG_DIR)/loader.img.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756loader:$(LOADER_VER) | tee $(LOG_DIR)/loader.repo.log
+	$(DK) build $(ARCH) -t $(CREG)/$(REGID)/$(TEAM)loader:$(LOADER_VER) loader  | tee $(LOG_DIR)/loader.img.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)loader:$(LOADER_VER) | tee $(LOG_DIR)/loader.repo.log
 
 # Push all the container images to the container registry
 # This isn't often used because the individual build targets also push
 # the updated images to the registry
 cr: registry-login
-	$(DK) push $(CREG)/$(REGID)/cmpt756s1:$(APP_VER_TAG) | tee $(LOG_DIR)/s1.repo.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756s2:$(S2_VER) | tee $(LOG_DIR)/s2.repo.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756s3:$(S3_VER) | tee $(LOG_DIR)/s3.repo.log
-	$(DK) push $(CREG)/$(REGID)/cmpt756db:$(APP_VER_TAG) | tee $(LOG_DIR)/db.repo.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s1:$(APP_VER_TAG) | tee $(LOG_DIR)/s1.repo.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s2:$(S2_VER) | tee $(LOG_DIR)/s2.repo.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)s3:$(S3_VER) | tee $(LOG_DIR)/s3.repo.log
+	$(DK) push $(CREG)/$(REGID)/$(TEAM)db:$(APP_VER_TAG) | tee $(LOG_DIR)/db.repo.log
 
 # ---------------------------------------------------------------------------------------
 # Handy bits for exploring the container images... not necessary
