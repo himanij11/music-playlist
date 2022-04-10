@@ -70,7 +70,7 @@ def fetchall():
     headers = request.headers  # noqa: F841
     # check header here
     objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
-    table_name = objtype.capitalize()+"-bikramjeetsingh"
+    table_name = objtype.capitalize()+"-himanijoshi-11"
     table = dynamodb.Table(table_name)
     response = table.scan(Select='ALL_ATTRIBUTES')
     return response
@@ -82,7 +82,7 @@ def scan():
     # check header here
     objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
     objkey = urllib.parse.unquote_plus(request.args.get('objkey'))
-    table_name = objtype.capitalize()+"-bikramjeetsingh"
+    table_name = objtype.capitalize()+"-himanijoshi-11"
     if 'tableid' in request.args:
         table_id = request.args.get('tableid')
     else:
@@ -102,7 +102,7 @@ def update():
     content = request.get_json()
     objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
     objkey = urllib.parse.unquote_plus(request.args.get('objkey'))
-    table_name = objtype.capitalize()+"-bikramjeetsingh"
+    table_name = objtype.capitalize()+"-himanijoshi-11"
     table_id = objtype + "_id"
     table = dynamodb.Table(table_name)
     expression = 'SET '
@@ -125,7 +125,7 @@ def read():
     # check header here
     objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
     objkey = urllib.parse.unquote_plus(request.args.get('objkey'))
-    table_name = objtype.capitalize()+"-bikramjeetsingh"
+    table_name = objtype.capitalize()+"-himanijoshi-11"
     if 'tableid' in request.args:
         table_id = request.args.get('tableid')
     else:
@@ -141,7 +141,7 @@ def write():
     headers = request.headers  # noqa: F841
     # check header here
     content = request.get_json()
-    table_name = content['objtype'].capitalize()+"-bikramjeetsingh"
+    table_name = content['objtype'].capitalize()+"-himanijoshi-11"
     objtype = content['objtype']
     table_id = objtype + "_id"
     payload = {table_id: str(uuid.uuid4())}
@@ -203,7 +203,7 @@ def load():
     content = request.get_json()
     if 'uuid' not in content:
         return json.dumps({"http_status_code": 400, "reason": 'Missing uuid'})
-    table_name = content['objtype'].capitalize()+"-bikramjeetsingh"
+    table_name = content['objtype'].capitalize()+"-himanijoshi-11"
     objtype = content['objtype']
     table_id = objtype + "_id"
     payload = {table_id: content['uuid']}
@@ -225,7 +225,7 @@ def delete():
     # check header here
     objtype = urllib.parse.unquote_plus(request.args.get('objtype'))
     objkey = urllib.parse.unquote_plus(request.args.get('objkey'))
-    table_name = objtype.capitalize()+"-bikramjeetsingh"
+    table_name = objtype.capitalize()+"-himanijoshi-11"
     table_id = objtype + "_id"
     table = dynamodb.Table(table_name)
     response = table.delete_item(Key={table_id: objkey})
