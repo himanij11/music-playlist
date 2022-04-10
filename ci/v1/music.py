@@ -18,7 +18,7 @@ class Music():
     ----------
     url: string
         The URL for accessing the music service. Often
-        'http://cmpt756s2:30001/'. Note the trailing slash.
+        'http://trockets2:30001/'. Note the trailing slash.
     auth: string
         Authorization code to pass to the music service. For many
         implementations, the code is required but its content is

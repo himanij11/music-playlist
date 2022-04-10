@@ -14,27 +14,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cmpt756s3-test
+  name: trockets3-test
   labels:
-    app: cmpt756s3
+    app: trockets3
     version: test
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cmpt756s3
+      app: trockets3
       version: test
   template:
     metadata:
       name: service3-pod
       labels:
-        app: cmpt756s3
+        app: trockets3
         version: test
     spec:
       serviceAccountName: svc-s3
       containers:
-      - name: cmpt756s3
-        image: 'ghcr.io/bikramjeetsingh/cmpt756s3:test'
+      - name: trockets3
+        image: 'ghcr.io/scp756-221/trockets3:test'
         imagePullPolicy: Always
         ports:
         - containerPort: 30003

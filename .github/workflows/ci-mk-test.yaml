@@ -68,7 +68,7 @@ jobs:
           cd ${{ github.workspace }}
           make -f mk.mak reinstate
           grep image ${{ github.workspace }}/s1/s1.yaml
-          kubectl -n cmpt756e4 apply -f ${{ github.workspace }}/s1/s1.yaml
+          kubectl -n trockete4 apply -f ${{ github.workspace }}/s1/s1.yaml
           
           
       - name: Sleep for 120 seconds

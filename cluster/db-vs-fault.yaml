@@ -1,10 +1,10 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: cmpt756db
+  name: trocketdb
 spec:
   hosts:
-  - cmpt756db
+  - trocketdb
   http:
   - match:
     - uri:
@@ -13,7 +13,7 @@ spec:
       uri: /api/v1/datastore
     route:
     - destination:
-        host: cmpt756db
+        host: trocketdb
         port:
           number: 30002
     fault:

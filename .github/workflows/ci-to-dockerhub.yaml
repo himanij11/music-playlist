@@ -51,7 +51,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v4
         name: Build & push db image
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/cmpt756db
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/trocketdb
           tag: latest
           registry: docker.io
           dockerfile: ./db/Dockerfile
@@ -62,7 +62,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v4
         name: Build & push s1 image
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/cmpt756s1
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/trockets1
           tag: latest
           registry: docker.io
           dockerfile: ./s1/Dockerfile
@@ -73,7 +73,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v4
         name: Build & push s2 image
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/cmpt756s2
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/trockets2
           tag: latest
           registry: docker.io
           dockerfile: ./s2/Dockerfile
