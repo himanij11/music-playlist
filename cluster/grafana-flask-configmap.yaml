@@ -595,23 +595,23 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"cmpt756db\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"cmpt756db\"}[1m]))",
+              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"trocketdb\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"trocketdb\"}[1m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "cmpt756db",
+              "legendFormat": "trocketdb",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"cmpt756s1\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"cmpt756s1\"}[1m]))",
+              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"trockets1\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"trockets1\"}[1m]))",
               "interval": "",
-              "legendFormat": "cmpt756s1",
+              "legendFormat": "trockets1",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"cmpt756s2\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"cmpt756s2\"}[1m]))",
+              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"trockets2\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"trockets2\"}[1m]))",
               "interval": "",
-              "legendFormat": "cmpt756s2",
+              "legendFormat": "trockets2",
               "refId": "C"
             }
           ],
@@ -713,23 +713,23 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756db\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trocketdb\",status=\"200\"}[1m])))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "cmpt756db",
+              "legendFormat": "trocketdb",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s1\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trockets1\",status=\"200\"}[1m])))",
               "interval": "",
-              "legendFormat": "cmpt756s1",
+              "legendFormat": "trockets1",
               "refId": "C"
             },
             {
-              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s2\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trockets2\",status=\"200\"}[1m])))",
               "interval": "",
-              "legendFormat": "cmpt756s2",
+              "legendFormat": "trockets2",
               "refId": "B"
             }
           ],
@@ -1035,23 +1035,23 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756db\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trocketdb\",status=\"200\"}[1m])))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "cmpt756db",
+              "legendFormat": "trocketdb",
               "refId": "A"
             },
             {
-              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s1\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trockets1\",status=\"200\"}[1m])))",
               "interval": "",
-              "legendFormat": "cmpt756s1",
+              "legendFormat": "trockets1",
               "refId": "B"
             },
             {
-              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s2\",status=\"200\"}[1m])))",
+              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"trockets2\",status=\"200\"}[1m])))",
               "interval": "",
-              "legendFormat": "cmpt756s2",
+              "legendFormat": "trockets2",
               "refId": "C"
             }
           ],
