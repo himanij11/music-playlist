@@ -360,10 +360,12 @@ data:
           "hiddenSeries": false,
           "id": 4,
           "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": true
@@ -381,10 +383,7 @@ data:
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
-            {
-              "alias": "errors",
-              "color": "#c15c17"
-            }
+            
           ],
           "spaceLength": 10,
           "stack": false,
@@ -392,34 +391,26 @@ data:
           "targets": [
             {
               "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756db\"}[1m]))",
-              "format": "time_series",
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "errors",
+              "legendFormat": "cmpt756db",
               "refId": "A"
             },
             {
               "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s1\"}[1m]))",
-              "format": "time_series",
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "errors",
+              "legendFormat": "cmpt756s1",
               "refId": "B"
             },
             {
               "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s2\"}[1m]))",
-              "format": "time_series",
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "errors",
+              "legendFormat": "cmpt756s2",
               "refId": "C"
             },
             {
               "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s3\"}[1m]))",
-              "format": "time_series",
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "errors",
+              "legendFormat": "cmpt756s3",
               "refId": "D"
             }
           ],
