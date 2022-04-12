@@ -360,10 +360,12 @@ data:
           "hiddenSeries": false,
           "id": 4,
           "legend": {
+            "alignAsTable": true,
             "avg": true,
             "current": true,
             "max": true,
             "min": false,
+            "rightSide": true,
             "show": true,
             "total": false,
             "values": true
@@ -381,29 +383,42 @@ data:
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
-            {
-              "alias": "errors",
-              "color": "#c15c17"
-            }
+            
           ],
           "spaceLength": 10,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\"}[1m]))",
-              "format": "time_series",
+              "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756db\"}[1m]))",
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "errors",
+              "legendFormat": "cmpt756db",
               "refId": "A"
+            },
+            {
+              "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s1\"}[1m]))",
+              "interval": "",
+              "legendFormat": "cmpt756s1",
+              "refId": "B"
+            },
+            {
+              "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s2\"}[1m]))",
+              "interval": "",
+              "legendFormat": "cmpt756s2",
+              "refId": "C"
+            },
+            {
+              "expr": "sum(rate(flask_http_request_duration_seconds_count{status!=\"200\", service=\"cmpt756s3\"}[1m]))",
+              "interval": "",
+              "legendFormat": "cmpt756s3",
+              "refId": "D"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "Errors per second [1m]",
+          "title": "Errors per second per service [1m]",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -613,6 +628,12 @@ data:
               "interval": "",
               "legendFormat": "trockets2",
               "refId": "C"
+            },
+            {
+              "expr": "sum(rate(flask_http_request_duration_seconds_sum{status=\"200\",service=\"cmpt756s3\"}[1m]))\n/\nsum(rate(flask_http_request_duration_seconds_count{status=\"200\",service=\"cmpt756s3\"}[1m]))",
+              "interval": "",
+              "legendFormat": "cmpt756s3",
+              "refId": "D"
             }
           ],
           "thresholds": [],
@@ -731,6 +752,12 @@ data:
               "interval": "",
               "legendFormat": "trockets2",
               "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.5, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s3\",status=\"200\"}[1m])))",
+              "interval": "",
+              "legendFormat": "cmpt756s3",
+              "refId": "D"
             }
           ],
           "thresholds": [],
@@ -1053,6 +1080,12 @@ data:
               "interval": "",
               "legendFormat": "trockets2",
               "refId": "C"
+            },
+            {
+              "expr": "histogram_quantile(0.9, sum by (le) (rate(flask_http_request_duration_seconds_bucket{service=\"cmpt756s3\",status=\"200\"}[1m])))",
+              "interval": "",
+              "legendFormat": "cmpt756s3",
+              "refId": "D"
             }
           ],
           "thresholds": [],
