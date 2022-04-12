@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "29bbbdd5-6482-44ee-923c-00e6ac072457",
+		"name": "S3-playlist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:30002/api/v1/playlist/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Inspiramentum\",\r\n    \"songs\": [\r\n        \"202a6bea-fdc9-4345-ac36-0a36eaa94344\",\r\n        \"38c8d444-730d-4045-8152-cf5c4ee9d8f1\"\r\n    ],\r\n    \"User\": \"49d0815c-bd87-4824-bb38-5c4c74a0c560\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:30002/api/v1/playlist/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "30002",
+					"path": [
+						"api",
+						"v1",
+						"playlist",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:30002/api/v1/playlist/b55586ef-610e-4946-b741-afe745c3c37b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fname\": \"Rob\",\r\n    \"lname\": \"Singh\",\r\n    \"email\": \"rob23singh@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:30002/api/v1/playlist/b55586ef-610e-4946-b741-afe745c3c37b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "30002",
+					"path": [
+						"api",
+						"v1",
+						"playlist",
+						"b55586ef-610e-4946-b741-afe745c3c37b"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
