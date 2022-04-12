@@ -7,14 +7,18 @@ We have created a cloud-service based application which uses highly decoupled mi
 
 The main components of this project are:
 #### 1. Set up kubernetes cluster on AWS
+We used ek8.mak to setup the cluster with minimum three nodes of type t3.medium in US-West-2 Region.
+
 #### 2. Develop 3rd microservice in a highly decoupled design
+The application incorporates five microservices. In addition to the already present User and Music microservices, we created an additional Playlist microservice that provides users the capability to organize their music into custom playlists. The service was written in Flask, and provides users the capability to create, view and delete their playlists.
+
 #### 3. Observe a system at load and Scaling
-	The Grafana and Kiali dashboard has been set up to view the traffic and effect on the system under stable load and after increasing the load, where load is simulated using Gatling tool. We first begin by giving a static load to our system using a Gatling script, where we send requests for 10 users per service, reaching about 3.5K total requests per minute . We monitor the effects using Grafana dashboard and Kiali dashboard. To encounter the failues coming up from the increasing the load, we scale the system by either increasing numnber of replicas for db service or increasing the number of nodes for the cluster.
+The Grafana and Kiali dashboard has been set up to view the traffic and effect on the system under stable load and after increasing the load, where load is simulated using Gatling tool. We first begin by giving a static load to our system using a Gatling script, where we send requests for 10 users per service, reaching about 3.5K total requests per minute . We monitor the effects using Grafana dashboard and Kiali dashboard. To encounter the failues coming up from the increasing the load, we scale the system by either increasing numnber of replicas for db service or increasing the number of nodes for the cluster.
 
 #### 4. Failure modes of a system 
 We experiment with the resilience of the system by deliberately introducing the failures like HTTP delays and timeouts and implementing traffic-shifting deployments. To simulate these behaviours, we make traffic policy changes in respective *-vs.yaml files and deploy the files to the running cluster to see changes in real time.
-#### 5. Explore various approaches to remediate such failures [TBD]
 
+#### 5. Third party tools used - DynamoDB, Grafana, Gatling, Prometheus and Kiali
 
 #### Please ensure AWS DynamoDB is accessible/running
 Regardless of where your cluster will run, it uses AWS DynamoDB
