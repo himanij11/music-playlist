@@ -31,12 +31,12 @@ object Utility {
 object RMusic {
 
   val feeder = csv("music.csv").eager.random
-
+  val delay = Utility.envVarToInt("DELAY", 1)
   val rmusic = forever("i") {
     feed(feeder)
     .exec(http("RMusic ${i}")
       .get("/api/v1/music/${UUID}"))
-      .pause(1)
+      .pause(delay)
   }
 
 }
@@ -44,12 +44,12 @@ object RMusic {
 object RUser {
 
   val feeder = csv("users.csv").eager.circular
-
+  val delay = Utility.envVarToInt("DELAY", 1)
   val ruser = forever("i") {
     feed(feeder)
     .exec(http("RUser ${i}")
       .get("/api/v1/user/${UUID}"))
-    .pause(1)
+    .pause(delay)
   }
 
 }
@@ -57,12 +57,12 @@ object RUser {
 object RPlaylist {
 
   val feeder = csv("playlists.csv").eager.circular
-
+  val delay = Utility.envVarToInt("DELAY", 1)
   val rplaylist = forever("i") {
     feed(feeder)
     .exec(http("RPlaylist ${i}")
       .get("/api/v1/playlist/${UUID}"))
-    .pause(1)
+    .pause(delay)
   }
 
 }
@@ -197,27 +197,27 @@ class ReadAllFixedSim extends ReadTablesSim {
 }
 
 /*
-  Read all services concurrently at varying rates.
-  Ramp up new users one / 10 s until requested USERS
+  Read all services concurrently at constant rates.
+  Ramp up new users one / 5 s until requested USERS
   is reached for each service.
 */
-class ReadAllVaryingSim extends ReadTablesSim {
+class ReadAllFixedRampSim extends ReadTablesSim {
   val scnReadMV = scenario("ReadMusicVarying")
-    .exec(RMusicVarying.rmusic)
+    .exec(RMusic.rmusic)
 
   val scnReadUV = scenario("ReadUserVarying")
-    .exec(RUserVarying.ruser)
+    .exec(RUser.ruser)
   
   val scnReadPV = scenario("ReadPlaylistVarying")
-    .exec(RPlaylistVarying.rplaylist)
+    .exec(RPlaylist.rplaylist)
 
   val users = Utility.envVarToInt("USERS", 10)
 
   setUp(
     // Add one user per 10 s up to specified value
-    scnReadMV.inject(rampConcurrentUsers(1).to(users).during(10*users)),
-    scnReadUV.inject(rampConcurrentUsers(1).to(users).during(10*users)),
-    scnReadPV.inject(rampConcurrentUsers(1).to(users).during(10*users))
+    scnReadMV.inject(rampConcurrentUsers(1).to(users).during(5*users)),
+    scnReadUV.inject(rampConcurrentUsers(1).to(users).during(5*users)),
+    scnReadPV.inject(rampConcurrentUsers(1).to(users).during(5*users))
   ).protocols(httpProtocol)
 }
 
